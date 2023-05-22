@@ -16,6 +16,8 @@ namespace WebAPICoreSample.Models
         public virtual DbSet<Employee>? Employees { get; set; }
         public virtual DbSet<UserInfo>? UserInfos { get; set; }
 
+        public virtual DbSet<Product>? Products { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserInfo>(entity =>
@@ -46,6 +48,17 @@ namespace WebAPICoreSample.Models
                 entity.Property(e => e.SickLeaveHours).IsUnicode(false);
                 entity.Property(e => e.RowGuid).HasMaxLength(50).IsUnicode(false);
                 entity.Property(e => e.ModifiedDate).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Product>(entity =>
+            {
+                //entity.HasNoKey();
+                entity.ToTable("Product");
+                entity.Property(e => e.ProductId).HasColumnName("ProductId");
+                entity.Property(e => e.ProductName).HasMaxLength(50).IsUnicode(false);
+                entity.Property(e => e.ProductDescription).HasMaxLength(50).IsUnicode(false);
+                entity.Property(e => e.ProductCost).IsUnicode(false);
+                entity.Property(e => e.ProductStock).IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);

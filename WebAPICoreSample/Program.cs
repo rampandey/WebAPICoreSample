@@ -59,6 +59,7 @@ builder.Services.AddSwaggerGen(option =>
 
 
 builder.Services.AddTransient<IEmployees, EmployeeRepository>();
+builder.Services.AddTransient<IProduct, ProductRepository>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -66,7 +67,6 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
-app.UseAuthentication();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -79,8 +79,12 @@ app.UseCors(x => x
             .AllowAnyMethod()
             .AllowAnyHeader());
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
 
 app.MapControllers();
 app.Run();
