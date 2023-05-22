@@ -58,16 +58,22 @@ namespace WebAPICoreSample.Controllers
                         expires: DateTime.UtcNow.AddMinutes(10),
                         signingCredentials: signIn);
 
-                    return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+                    var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+                    return  Ok(new JWTTokenResponse
+                    {
+                        Token = tokenString
+                    });
                 }
                 else
                 {
-                    return BadRequest("Invalid credentials");
+                    //return BadRequest("Invalid credentials");
+                    return new JsonResult("Invalid credentials");
                 }
             }
             else
             {
-                return BadRequest();
+                //return BadRequest();
+                return new JsonResult("BadRequest");
             }
         }
 
@@ -80,6 +86,15 @@ namespace WebAPICoreSample.Controllers
         private async Task<UserInfo> GetUser(string email, string password)
         {
             return await _context.UserInfos.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+        }
+    }
+
+    public class JWTTokenResponse
+    {
+        public string? Token
+        {
+            get;
+            set;
         }
     }
 }
